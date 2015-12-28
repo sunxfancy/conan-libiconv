@@ -22,12 +22,13 @@ class Bzip2Conan(ConanFile):
         check_md5(zip_name, "e34509b1623cec449dfeb73d7ce9c6c6")
         unzip(zip_name)
         os.unlink(zip_name)
-        text_to_replace = '_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");'
-        replaced_text = '''#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
-_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
-#endif'''
-        replace_in_file(os.path.join(self.ZIP_FOLDER_NAME, "srclib", "stdio.in.h"), text_to_replace, replaced_text)
-        
+        if self.settings.os == "Linux":
+            text_to_replace = '_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");'
+            replaced_text = '''#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
+    _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+    #endif'''
+            replace_in_file(os.path.join(self.ZIP_FOLDER_NAME, "srclib", "stdio.in.h"), text_to_replace, replaced_text)
+            
     def config(self):
         if self.settings.os == "Windows":
             self.requires.add("winiconv/1.14.0@lasote/stable", private=False)
