@@ -15,7 +15,11 @@ int main(int argc, char *argv[])
     char * pOut = ( char*)dst;
  
     iconv_t conv = iconv_open("UTF-8","CP1250");
-    iconv(conv, (const char **) &pIn, &srclen, &pOut, &dstlen);
+    #ifdef _WIN32
+        iconv(conv, (const char **) &pIn, &srclen, &pOut, &dstlen);
+    #else
+        iconv(conv, &pIn, &srclen, &pOut, &dstlen);
+    #endif
     iconv_close(conv);
  
     fprintf(stderr,"out: %s\n",dst);
