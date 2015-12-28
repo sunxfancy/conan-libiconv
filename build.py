@@ -55,18 +55,13 @@ if __name__ == "__main__":
            
      
     else:
-        
-          # Static x86_64
-        test('-s arch=x86_64 -s build_type=Debug -o libiconv:shared=False')
-        test('-s arch=x86_64 -s build_type=Release -o libiconv:shared=False')
- 
- 
-        # Shared x86_64
+         # Shared x86_64
         test('-s arch=x86_64 -s build_type=Debug -o libiconv:shared=True')
         test('-s arch=x86_64 -s build_type=Release -o libiconv:shared=True')
      
-      
-   
+        # Static x86_64
+        test('-s arch=x86_64 -s build_type=Debug -o libiconv:shared=False')
+        test('-s arch=x86_64 -s build_type=Release -o libiconv:shared=False')
                    
         # Static x86
         test('-s arch=x86 -s build_type=Debug -o libiconv:shared=False')

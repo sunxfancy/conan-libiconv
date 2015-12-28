@@ -80,5 +80,5 @@ class LibiconvConan(ConanFile):
     def package_info(self):
         if self.settings.os == "Linux" or self.settings.os == "Macos":
             self.cpp_info.libs = ['charset', 'iconv']
-            if self.settings.os == "Linux":
+            if self.settings.os == "Linux" or (self.options.shared and self.settings.os == "Macos"):
                 self.cpp_info.defines.append("LIBICONV_PLUG=1")
