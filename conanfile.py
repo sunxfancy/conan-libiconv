@@ -4,7 +4,7 @@ from conans.tools import download, unzip, replace_in_file, check_md5
 from conans import CMake
 
 
-class Bzip2Conan(ConanFile):
+class LibiconvConan(ConanFile):
     name = "libiconv"
     version = "1.14"
     branch = "master"
@@ -17,17 +17,18 @@ class Bzip2Conan(ConanFile):
     #requires = "zlib/1.2.8@lasote/stable"
 
     def source(self):
-        zip_name = "libiconv-%s.tar.gz" % self.version
-        download("http://ftp.gnu.org/pub/gnu/libiconv/%s" % zip_name, zip_name)
-        check_md5(zip_name, "e34509b1623cec449dfeb73d7ce9c6c6")
-        unzip(zip_name)
-        os.unlink(zip_name)
-        if self.settings.os == "Linux":
-            text_to_replace = '_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");'
-            replaced_text = '''#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
+        if self.settings.os != "Windows": # wraps winiconv for windows
+            zip_name = "libiconv-%s.tar.gz" % self.version
+            download("http://ftp.gnu.org/pub/gnu/libiconv/%s" % zip_name, zip_name)
+            check_md5(zip_name, "e34509b1623cec449dfeb73d7ce9c6c6")
+            unzip(zip_name)
+            os.unlink(zip_name)
+            if self.settings.os == "Linux":
+	        text_to_replace = '_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");'
+                replaced_text = '''#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
     _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
     #endif'''
-            replace_in_file(os.path.join(self.ZIP_FOLDER_NAME, "srclib", "stdio.in.h"), text_to_replace, replaced_text)
+                replace_in_file(os.path.join(self.ZIP_FOLDER_NAME, "srclib", "stdio.in.h"), text_to_replace, replaced_text)
             
     def config(self):
         if self.settings.os == "Windows":
@@ -79,7 +80,5 @@ class Bzip2Conan(ConanFile):
     def package_info(self):
         if self.settings.os == "Linux" or self.settings.os == "Macos":
             self.cpp_info.libs = ['charset', 'iconv']
-            self.cpp_info.defines.append("LIBICONV_PLUG=1")
-        else:
-            self.cpp_info.libs = ['libiconv'] 
-   
+            if self.settings.os == "Linux":
+                self.cpp_info.defines.append("LIBICONV_PLUG=1")
