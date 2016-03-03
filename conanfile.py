@@ -31,6 +31,10 @@ class LibiconvConan(ConanFile):
                 replace_in_file(os.path.join(self.ZIP_FOLDER_NAME, "srclib", "stdio.in.h"), text_to_replace, replaced_text)
             
     def config(self):
+        try: # Try catch can be removed when conan 0.8 is released
+            del self.settings.compiler.libcxx 
+        except: 
+            pass
         if self.settings.os == "Windows":
             self.requires.add("winiconv/1.14.0@lasote/stable", private=False)
         
