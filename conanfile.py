@@ -44,7 +44,7 @@ class LibiconvConan(ConanFile):
             libs = 'LIBS="%s"' % " ".join(["-l%s" % lib for lib in self.deps_cpp_info.libs])
             ldflags = 'LDFLAGS="%s"' % " ".join(["-L%s" % lib for lib in self.deps_cpp_info.lib_paths]) 
             archflag = "-m32" if self.settings.arch == "x86" else ""
-            cflags = 'CFLAGS="%s %s"' % (archflag, " ".join(self.deps_cpp_info.cflags))
+            cflags = 'CFLAGS="-fPIC %s %s"' % (archflag, " ".join(self.deps_cpp_info.cflags))
             cpp_flags = 'CPPFLAGS="%s %s"' % (archflag, " ".join(self.deps_cpp_info.cppflags))
             command = "env %s %s %s %s" % (libs, ldflags, cflags, cpp_flags)
         elif self.settings.os == "Windows" and self.settings.compiler == "Visual Studio":
