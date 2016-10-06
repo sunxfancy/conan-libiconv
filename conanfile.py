@@ -1,7 +1,7 @@
 from conans import ConanFile
 import os, shutil
 from conans.tools import download, unzip, replace_in_file, check_md5
-from conans import CMake
+from conans import CMake, ConfigureEnvironment
 
 
 class LibiconvConan(ConanFile):
@@ -38,24 +38,6 @@ class LibiconvConan(ConanFile):
         if self.settings.os == "Windows":
             self.requires.add("winiconv/1.14.0@lasote/stable", private=False)
         
-    def generic_env_configure_vars(self, verbose=False):
-        """Reusable in any lib with configure!!"""
-        if self.settings.os == "Linux" or self.settings.os == "Macos":
-            libs = 'LIBS="%s"' % " ".join(["-l%s" % lib for lib in self.deps_cpp_info.libs])
-            ldflags = 'LDFLAGS="%s"' % " ".join(["-L%s" % lib for lib in self.deps_cpp_info.lib_paths]) 
-            archflag = "-m32" if self.settings.arch == "x86" else ""
-            cflags = 'CFLAGS="-fPIC %s %s"' % (archflag, " ".join(self.deps_cpp_info.cflags))
-            cpp_flags = 'CPPFLAGS="%s %s"' % (archflag, " ".join(self.deps_cpp_info.cppflags))
-            command = "env %s %s %s %s" % (libs, ldflags, cflags, cpp_flags)
-        elif self.settings.os == "Windows" and self.settings.compiler == "Visual Studio":
-            cl_args = " ".join(['/I"%s"' % lib for lib in self.deps_cpp_info.include_paths])
-            lib_paths= ";".join(['"%s"' % lib for lib in self.deps_cpp_info.lib_paths])
-            command = "SET LIB=%s;%%LIB%% && SET CL=%s" % (lib_paths, cl_args)
-            if verbose:
-                command += " && SET LINK=/VERBOSE"
-        
-        return command
-       
     def build(self):
         if self.settings.os == "Windows":
             pass # wrapper for winiconv
@@ -63,9 +45,11 @@ class LibiconvConan(ConanFile):
             self.build_with_configure()
             
         
-    def build_with_configure(self): 
-        configure_command = "cd %s && %s ./configure --enable-static --enable-shared --disable-rpath" % (self.ZIP_FOLDER_NAME, 
-                                                         self.generic_env_configure_vars())
+    def build_with_configure(self):
+        env = ConfigureEnvironment(self.deps_cpp_info, self.settings)
+        env_line = env.command_line.replace('CFLAGS="', 'CFLAGS="-fPIC ')
+        
+        configure_command = "cd %s && %s ./configure --enable-static --enable-shared --disable-rpath" % (self.ZIP_FOLDER_NAME, env_line)
         self.output.warn(configure_command)
         self.run(configure_command)
         self.run("cd %s && make" % self.ZIP_FOLDER_NAME)
