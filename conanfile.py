@@ -24,7 +24,7 @@ class LibiconvConan(ConanFile):
             unzip(zip_name)
             os.unlink(zip_name)
             if self.settings.os == "Linux":
-	        text_to_replace = '_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");'
+                text_to_replace = '_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");'
                 replaced_text = '''#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
     _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
     #endif'''
