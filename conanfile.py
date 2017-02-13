@@ -36,7 +36,7 @@ class LibiconvConan(ConanFile):
         except: 
             pass
         if self.settings.os == "Windows":
-            self.requires.add("winiconv/1.14.0@lasote/stable", private=False)
+            self.requires.add("winiconv/1.14.0@sunxfancy/stable", private=False)
         
     def generic_env_configure_vars(self, verbose=False):
         """Reusable in any lib with configure!!"""
