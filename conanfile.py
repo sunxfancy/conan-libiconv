@@ -13,8 +13,7 @@ class LibiconvConan(ConanFile):
     settings =  "os", "compiler", "arch", "build_type"
     options = {"shared": [True, False]}
     default_options = "shared=False"
-    url = "http://github.com/lasote/conan-libiconv"
-    #requires = "zlib/1.2.8@lasote/stable"
+    url = "http://github.com/sunxfancy/conan-libiconv"
 
     def source(self):
         if self.settings.os != "Windows": # wraps winiconv for windows
@@ -36,7 +35,7 @@ class LibiconvConan(ConanFile):
         except: 
             pass
         if self.settings.os == "Windows":
-            self.requires.add("winiconv/1.14.0@sunxfancy/stable", private=False)
+            self.requires.add("winiconv/1.14.1@sunxfancy/stable", private=False)
         
     def generic_env_configure_vars(self, verbose=False):
         """Reusable in any lib with configure!!"""
