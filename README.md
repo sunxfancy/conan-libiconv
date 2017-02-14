@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/sunxfancy/conan-libiconv.svg?branch=master)](https://travis-ci.org/sunxfancy/conan-libiconv)
 
 # conan-libiconv
 
