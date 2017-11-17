@@ -4,7 +4,7 @@ env:
      - CONAN_USERNAME: "sunxfancy"
      - CONAN_LOGIN_USERNAME: "sunxfancy"
      - CONAN_CHANNEL: "ci"
-     - CONAN_UPLOAD: "https://api.bintray.com/conan/elite-lang/libiconv"
+     - CONAN_UPLOAD: "https://api.bintray.com/conan/elite-lang/ECDK"
      - CONAN_STABLE_BRANCH_PATTERN: "master"
 
 linux: &linux
