@@ -20,4 +20,5 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
 fi
 
 sudo pip install conan_package_tools # It install conan too
+sudo pip install conan
 conan user
