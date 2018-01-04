@@ -17,7 +17,7 @@ class DefaultNameConan(ConanFile):
     version = "0.1"
     settings = "os", "compiler", "arch", "build_type"
     generators = "cmake"
-    requires = "libiconv/1.14.2@%s/%s" % (username, channel)
+    requires = "libiconv/1.14.3@%s/%s" % (username, channel)
 
     def build(self):
         cmake = CMake(self)
