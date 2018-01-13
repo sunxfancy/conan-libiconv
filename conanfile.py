@@ -6,7 +6,7 @@ from conans import CMake
 
 class LibiconvConan(ConanFile):
     name = "libiconv"
-    version = "1.14.3"
+    version = "1.14.4"
     source_version = "1.14"
     branch = "master"
     ZIP_FOLDER_NAME = "libiconv-%s" % source_version
